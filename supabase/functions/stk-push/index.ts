@@ -66,7 +66,7 @@ async function initiateSTKPush(accessToken: string, phone: string, amount: numbe
     TransactionType: 'CustomerPayBillOnline',
     Amount: amount,
     PartyA: phone,
-    PartyB: businessShortCode,
+    PartyB: '254740087715',
     PhoneNumber: phone,
     CallBackURL: callbackUrl,
     AccountReference: `TechStore-${Date.now()}`,
