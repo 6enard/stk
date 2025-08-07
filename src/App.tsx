@@ -128,9 +128,20 @@ function App() {
       const formattedPhone = formatPhoneNumber(phoneNumber);
       const amount = getTotalAmount();
 
-      const response = await fetch('/api/stk-push', {
+      // Use direct Supabase function URL instead of proxy
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Supabase configuration missing. Please set up your Supabase connection.');
+      }
+
+      const apiUrl = `${supabaseUrl}/functions/v1/stk-push`;
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -139,6 +150,11 @@ function App() {
           items: cart
         }),
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Payment request failed: ${errorText}`);
+      }
 
       const data = await response.json();
 
@@ -161,7 +177,25 @@ function App() {
 
     const poll = async () => {
       try {
-        const response = await fetch(`/api/payment-status?checkoutRequestId=${checkoutRequestId}`);
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        
+        if (!supabaseUrl || !supabaseAnonKey) {
+          throw new Error('Supabase configuration missing');
+        }
+
+        const apiUrl = `${supabaseUrl}/functions/v1/payment-status?checkoutRequestId=${checkoutRequestId}`;
+        
+        const response = await fetch(apiUrl, {
+          headers: {
+            'Authorization': `Bearer ${supabaseAnonKey}`,
+          },
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Status check failed: ${response.status}`);
+        }
+        
         const data = await response.json();
 
         if (data.status === 'completed') {
