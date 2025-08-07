@@ -21,13 +21,9 @@ const corsHeaders = {
 };
 
 async function getDarajaToken(): Promise<string> {
-  const consumerKey = Deno.env.get('DARAJA_CONSUMER_KEY');
-  const consumerSecret = Deno.env.get('DARAJA_CONSUMER_SECRET');
+  const consumerKey = Deno.env.get('DARAJA_CONSUMER_KEY') || 'sYs9Ig9SvbwVOqqiJ6psYKJWBu1wi3kzG7YXN2ApwL2BYdxO';
+  const consumerSecret = Deno.env.get('DARAJA_CONSUMER_SECRET') || 'xailp5i99ryshgC3L7BnP17dPTNAvvxAXlKlOOyHQmWqbcUkDQowxMkIsc4o7EYr';
   
-  if (!consumerKey || !consumerSecret) {
-    throw new Error('Daraja credentials not found');
-  }
-
   const credentials = btoa(`${consumerKey}:${consumerSecret}`);
   
   const response = await fetch('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', {
