@@ -36,7 +36,7 @@ async function getDarajaToken(): Promise<string> {
   
   const credentials = btoa(`${consumerKey}:${consumerSecret}`);
   
-  const response = await fetch('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', {
+  const response = await fetch('https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', {
     method: 'GET',
     headers: {
       'Authorization': `Basic ${credentials}`,
@@ -52,9 +52,9 @@ async function getDarajaToken(): Promise<string> {
 }
 
 async function initiateSTKPush(accessToken: string, phone: string, amount: number): Promise<STKPushResponse> {
-  const businessShortCode = Deno.env.get('DARAJA_BUSINESS_SHORT_CODE') || '174379';
-  const passkey = Deno.env.get('DARAJA_PASSKEY') || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
-  const callbackUrl = Deno.env.get('DARAJA_CALLBACK_URL') || 'https://your-domain.com/api/callback';
+  const businessShortCode = Deno.env.get('DARAJA_BUSINESS_SHORT_CODE') || '174379'; // You'll need to get your production shortcode
+  const passkey = Deno.env.get('DARAJA_PASSKEY') || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'; // You'll need your production passkey
+  const callbackUrl = Deno.env.get('DARAJA_CALLBACK_URL') || 'https://stk-sigma.vercel.app/api/callback';
   
   const timestamp = new Date().toISOString().replace(/[^0-9]/g, '').slice(0, -3);
   const password = btoa(`${businessShortCode}${passkey}${timestamp}`);
@@ -73,7 +73,7 @@ async function initiateSTKPush(accessToken: string, phone: string, amount: numbe
     TransactionDesc: 'Payment for TechStore items'
   };
 
-  const response = await fetch('https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest', {
+  const response = await fetch('https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${accessToken}`,
