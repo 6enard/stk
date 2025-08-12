@@ -128,20 +128,12 @@ function App() {
       const formattedPhone = formatPhoneNumber(phoneNumber);
       const amount = getTotalAmount();
 
-      // Use direct Supabase function URL instead of proxy
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
-      if (!supabaseUrl || !supabaseAnonKey) {
-        throw new Error('Supabase configuration missing. Please set up your Supabase connection.');
-      }
-
-      const apiUrl = `${supabaseUrl}/functions/v1/stk-push`;
+      // Use Node.js backend API
+      const apiUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/stk-push`;
       
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${supabaseAnonKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -177,19 +169,10 @@ function App() {
 
     const poll = async () => {
       try {
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-        
-        if (!supabaseUrl || !supabaseAnonKey) {
-          throw new Error('Supabase configuration missing');
-        }
-
-        const apiUrl = `${supabaseUrl}/functions/v1/payment-status?checkoutRequestId=${checkoutRequestId}`;
+        const apiUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/payment-status?checkoutRequestId=${checkoutRequestId}`;
         
         const response = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${supabaseAnonKey}`,
-          },
+          method: 'GET',
         });
         
         if (!response.ok) {
