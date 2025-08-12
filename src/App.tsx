@@ -128,8 +128,8 @@ function App() {
       const formattedPhone = formatPhoneNumber(phoneNumber);
       const amount = getTotalAmount();
 
-      // Use Node.js backend API
-      const apiUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/stk-push`;
+      // Use proxied API endpoint
+      const apiUrl = '/api/stk-push';
       
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -169,7 +169,7 @@ function App() {
 
     const poll = async () => {
       try {
-        const apiUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/payment-status?checkoutRequestId=${checkoutRequestId}`;
+        const apiUrl = `/api/payment-status?checkoutRequestId=${checkoutRequestId}`;
         
         const response = await fetch(apiUrl, {
           method: 'GET',
