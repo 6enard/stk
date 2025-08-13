@@ -45,7 +45,7 @@ async function getDarajaToken() {
 
 // Helper function to initiate STK push
 async function initiateSTKPush(accessToken, phone, amount) {
-  const businessShortCode = process.env.DARAJA_BUSINESS_SHORT_CODE || '174379';
+  const businessShortCode = process.env.DARAJA_BUSINESS_SHORT_CODE || '522522';
   const passkey = process.env.DARAJA_PASSKEY || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
   const callbackUrl = process.env.DARAJA_CALLBACK_URL || `http://localhost:${PORT}/api/callback`;
   
@@ -62,7 +62,7 @@ async function initiateSTKPush(accessToken, phone, amount) {
     PartyB: businessShortCode,
     PhoneNumber: phone,
     CallBackURL: callbackUrl,
-    AccountReference: `TechStore-${Date.now()}`,
+    AccountReference: '1111485429',
     TransactionDesc: 'Payment for TechStore items'
   };
 
@@ -87,7 +87,7 @@ async function initiateSTKPush(accessToken, phone, amount) {
 
 // Helper function to query STK status
 async function querySTKStatus(accessToken, checkoutRequestId) {
-  const businessShortCode = process.env.DARAJA_BUSINESS_SHORT_CODE || '174379';
+  const businessShortCode = process.env.DARAJA_BUSINESS_SHORT_CODE || '522522';
   const passkey = process.env.DARAJA_PASSKEY || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
   
   const timestamp = new Date().toISOString().replace(/[^0-9]/g, '').slice(0, -3);
